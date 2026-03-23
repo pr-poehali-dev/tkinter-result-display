@@ -1,11 +1,25 @@
 import { useState, useEffect } from "react";
 
 const FULL_TEXT = "хороший человек не найден";
+const CAT_URL = "https://cdn.poehali.dev/files/35ec0bd5-c3f7-4b71-90db-7da54bd3c69e.jpg";
+
+const btnStyle: React.CSSProperties = {
+  background: "transparent",
+  border: "1px solid rgba(255,255,255,0.25)",
+  color: "rgba(255,255,255,0.6)",
+  padding: "8px 22px",
+  fontSize: "12px",
+  letterSpacing: "0.15em",
+  cursor: "pointer",
+  fontFamily: "inherit",
+  transition: "all 0.2s",
+};
 
 const Index = () => {
   const [displayed, setDisplayed] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const [done, setDone] = useState(false);
+  const [showCat, setShowCat] = useState(false);
 
   useEffect(() => {
     if (displayed.length < FULL_TEXT.length) {
@@ -26,6 +40,13 @@ const Index = () => {
 
   const handleShowAll = () => {
     setDisplayed(FULL_TEXT);
+    setShowCat(true);
+  };
+
+  const handleRepeat = () => {
+    setDisplayed("");
+    setDone(false);
+    setShowCat(false);
   };
 
   return (
@@ -40,7 +61,7 @@ const Index = () => {
         fontFamily: "'Courier New', Courier, monospace",
       }}
     >
-      {/* Scan line effect */}
+      {/* Scan lines */}
       <div
         style={{
           position: "fixed",
@@ -51,7 +72,6 @@ const Index = () => {
           zIndex: 0,
         }}
       />
-
       {/* Vignette */}
       <div
         style={{
@@ -65,7 +85,6 @@ const Index = () => {
       />
 
       <div style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
-        {/* Search label */}
         <div
           style={{
             color: "rgba(255,255,255,0.3)",
@@ -78,7 +97,6 @@ const Index = () => {
           результат поиска
         </div>
 
-        {/* Main text */}
         <div
           style={{
             color: "#fff",
@@ -106,10 +124,34 @@ const Index = () => {
           />
         </div>
 
+        {/* Cat image */}
+        {showCat && (
+          <div
+            style={{
+              marginTop: "32px",
+              animation: "fadeInCat 0.4s ease",
+            }}
+          >
+            <img
+              src={CAT_URL}
+              alt="кот"
+              style={{
+                width: "260px",
+                height: "260px",
+                objectFit: "cover",
+                borderRadius: "8px",
+                border: "1px solid rgba(255,255,255,0.15)",
+                display: "block",
+                margin: "0 auto",
+              }}
+            />
+          </div>
+        )}
+
         {/* Buttons */}
         <div
           style={{
-            marginTop: "56px",
+            marginTop: "40px",
             display: "flex",
             gap: "16px",
             justifyContent: "center",
@@ -117,63 +159,41 @@ const Index = () => {
         >
           <button
             onClick={handleShowAll}
-            style={{
-              background: "transparent",
-              border: "1px solid rgba(255,255,255,0.25)",
-              color: "rgba(255,255,255,0.6)",
-              padding: "8px 22px",
-              fontSize: "12px",
-              letterSpacing: "0.15em",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              transition: "all 0.2s",
-            }}
+            style={btnStyle}
             onMouseEnter={(e) => {
-              (e.target as HTMLButtonElement).style.borderColor =
-                "rgba(255,255,255,0.7)";
+              (e.target as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.7)";
               (e.target as HTMLButtonElement).style.color = "#fff";
             }}
             onMouseLeave={(e) => {
-              (e.target as HTMLButtonElement).style.borderColor =
-                "rgba(255,255,255,0.25)";
-              (e.target as HTMLButtonElement).style.color =
-                "rgba(255,255,255,0.6)";
+              (e.target as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.25)";
+              (e.target as HTMLButtonElement).style.color = "rgba(255,255,255,0.6)";
             }}
           >
             ПОКАЗАТЬ СРАЗУ
           </button>
           <button
-            onClick={() => {
-              setDisplayed("");
-              setDone(false);
-            }}
-            style={{
-              background: "transparent",
-              border: "1px solid rgba(255,255,255,0.25)",
-              color: "rgba(255,255,255,0.6)",
-              padding: "8px 22px",
-              fontSize: "12px",
-              letterSpacing: "0.15em",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              transition: "all 0.2s",
-            }}
+            onClick={handleRepeat}
+            style={btnStyle}
             onMouseEnter={(e) => {
-              (e.target as HTMLButtonElement).style.borderColor =
-                "rgba(255,255,255,0.7)";
+              (e.target as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.7)";
               (e.target as HTMLButtonElement).style.color = "#fff";
             }}
             onMouseLeave={(e) => {
-              (e.target as HTMLButtonElement).style.borderColor =
-                "rgba(255,255,255,0.25)";
-              (e.target as HTMLButtonElement).style.color =
-                "rgba(255,255,255,0.6)";
+              (e.target as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.25)";
+              (e.target as HTMLButtonElement).style.color = "rgba(255,255,255,0.6)";
             }}
           >
             ПОВТОРИТЬ
           </button>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeInCat {
+          from { opacity: 0; transform: scale(0.85); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
     </div>
   );
 };
